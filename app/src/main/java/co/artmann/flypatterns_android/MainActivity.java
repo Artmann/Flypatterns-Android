@@ -3,6 +3,7 @@ package co.artmann.flypatterns_android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,8 +14,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
@@ -27,20 +34,18 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
-*/
-        patterns = new ArrayList<Flypattern>();
 
+        Log.d("foo", "Start");
+
+        patterns = new ArrayList<Flypattern>();
+        new GetPatterns().execute();
+
+/*
         patterns.add(new Flypattern(1, "Adams", "/assets/patterns/1/small/Adams-side.jpg?1369647019"));
         patterns.add(new Flypattern(2, "Abbey", "/assets/patterns/49/small/abbey.jpg?1369601000"));
         patterns.add(new Flypattern(3, "Alexandra", "/assets/patterns/57/small/alexandra.png?1390907755"));
         patterns.add(new Flypattern(4, "Black and Green", "/assets/patterns/3/small/Black-and-Green-2d16ad1968844a4300e9a490588ff9f8.jpg?1368450969"));
-
+*/
         filteredPatterns = patterns;
 
         ListView list = (ListView) findViewById(R.id.list);
@@ -110,6 +115,41 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         }
         catch (Exception e) {
             Log.e("Exception", e.getMessage());
+        }
+    }
+
+    private class GetPatterns extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            Log.d("foo", "DoInBackground");
+            ServiceHandler sh = new ServiceHandler();
+            String jsonStr = sh.makeServiceCall("http://www.flypatterns.co/pattern.json", ServiceHandler.GET);
+            Log.d("foo", jsonStr);
+
+            try {
+                JSONArray array = new JSONArray(jsonStr);
+                for(int i = 0; i < array.length(); i++) {
+                    JSONObject jsonObject = array.getJSONObject(i);
+                    int id = jsonObject.getInt("id");
+                    String name = jsonObject.getString("name");
+                    String thumbnail = jsonObject.getString("thumb");
+
+                    Flypattern pattern = new Flypattern(id, name, thumbnail);
+                    patterns.add(pattern);
+
+                }
+            } catch(JSONException e) {
+                Log.e("Exception", e.getLocalizedMessage());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            adapter.setData(filteredPatterns);
+            adapter.notifyDataSetChanged();
         }
     }
 }
