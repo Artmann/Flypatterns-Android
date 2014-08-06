@@ -19,6 +19,8 @@ public class Flypattern implements Parcelable {
     private int id = 0;
     private String name = "";
     private String thumbnail = "";
+    private String text = "";
+    private String image = "";
 
     public static String baseURL = "http://www.flypatterns.co";
 
@@ -38,6 +40,27 @@ public class Flypattern implements Parcelable {
 
     public String getThumbnail() {
         return Flypattern.baseURL + thumbnail;
+    }
+
+    public String getText() {
+        return this.text;
+    }
+
+    public String getImage() {
+        if(this.image.length() > 0) {
+            return Flypattern.baseURL + "/assets/patterns/" + this.getID() + "/large/" + this.image;
+        }
+        else {
+            return this.getThumbnail();
+        }
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     protected Flypattern(Parcel in) {

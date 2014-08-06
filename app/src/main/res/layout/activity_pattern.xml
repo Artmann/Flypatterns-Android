@@ -34,5 +34,14 @@
             android:textSize="16dip"
             android:layout_marginTop="10dp"
             />
+
+        <TextView
+            android:text="asd"
+            android:id="@+id/text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dip"
+            android:layout_marginTop="10dp"
+            />
     </LinearLayout>
 </LinearLayout>

@@ -122,10 +122,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         @Override
         protected Void doInBackground(Void... params) {
-            Log.d("foo", "DoInBackground");
             ServiceHandler sh = new ServiceHandler();
             String jsonStr = sh.makeServiceCall("http://www.flypatterns.co/pattern.json", ServiceHandler.GET);
-            Log.d("foo", jsonStr);
 
             try {
                 JSONArray array = new JSONArray(jsonStr);
