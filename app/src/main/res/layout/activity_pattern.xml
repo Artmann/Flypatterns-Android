@@ -27,7 +27,7 @@
         >
 
         <TextView
-            android:text="asd"
+            android:text=""
             android:id="@+id/name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -36,12 +36,17 @@
             />
 
         <TextView
-            android:text="asd"
+            android:text=""
             android:id="@+id/text"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="16dip"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             />
+
+        <ListView
+            android:id="@+id/specList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></ListView>
     </LinearLayout>
 </LinearLayout>

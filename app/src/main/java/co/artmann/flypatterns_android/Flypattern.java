@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 public class Flypattern implements Parcelable {
     private int id = 0;
@@ -21,6 +22,7 @@ public class Flypattern implements Parcelable {
     private String thumbnail = "";
     private String text = "";
     private String image = "";
+    private ArrayList<PatternSpec> specs = null;
 
     public static String baseURL = "http://www.flypatterns.co";
 
@@ -28,6 +30,18 @@ public class Flypattern implements Parcelable {
         this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
+        this.specs = new ArrayList<PatternSpec>();
+    }
+
+    public void addSpec(PatternSpec ps) {
+        if(this.specs == null) {
+            specs = new ArrayList<PatternSpec>();
+        }
+        this.specs.add(ps);
+    }
+
+    public ArrayList<PatternSpec> getSpecs() {
+        return this.specs;
     }
 
     public int getID() {
@@ -47,12 +61,7 @@ public class Flypattern implements Parcelable {
     }
 
     public String getImage() {
-        if(this.image.length() > 0) {
-            return Flypattern.baseURL + "/assets/patterns/" + this.getID() + "/large/" + this.image;
-        }
-        else {
-            return this.getThumbnail();
-        }
+        return this.image.length() > 0 ? Flypattern.baseURL + this.image : this.getThumbnail();
     }
 
     public void setText(String text) {
